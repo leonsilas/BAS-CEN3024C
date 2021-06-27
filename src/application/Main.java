@@ -31,7 +31,7 @@ public class Main extends Application {
 					
 					 //creation of Map and use of counter
 					Map<String, Integer> wordCount = new HashMap<String, Integer>();
-					String fileName = "C:\\Users\\Sern\\Documents\\School Work\\2020-2021\\Summer2021\\Software Development I\\TextStats\\lib\\theRavenPoem.html";
+					String fileName = "C:\\Users\\Sern\\Documents\\School Work\\2020-2021\\Summer2021\\Software Development I\\WordOccurances\\lib\\theRavenPoem.html";
 					int count = 0;
 					String [] topWords ;
 					Integer [] topOccurances;
@@ -67,24 +67,8 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-		
-		 /*//creation of Map and use of counter
-		Map<String, Integer> wordCount = new HashMap<String, Integer>();
-		String fileName = "C:\\Users\\Sern\\Documents\\School Work\\2020-2021\\Summer2021\\Software Development I\\TextStats\\lib\\theRavenPoem.html";
-		int count = 0;
-		String [] topWords ;
-		Integer [] topOccurances;
-		topWords = new String[20];
-		topOccurances = new Integer[20];
-		
-		//3 functions to sort and output poem words
-		WordFrequencyCounter.wordCounter(fileName, wordCount);
-		WordFrequencyCounter.wordsToArrays( topWords, topOccurances, wordCount, count);        
-		WordFrequencyCounter.wordOutput(topOccurances, topWords);*/
-        
-        //GUI
-       launch(args);
-      
+		//GUI
+		launch(args);
 	}//end of main
 	
 }
