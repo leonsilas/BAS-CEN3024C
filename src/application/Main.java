@@ -12,8 +12,21 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+//TODO Add JavaDoc - MODULE 9
+//TODO Add Database - MODULE 10
+//TODO Add Deployment - MODULE 11
+
+/** Represents the GUI for the program.
+ * @author Leon Silas
+ * @author www.github.com/leonsilas
+ * @version 1.0
+*/
+
 public class Main extends Application {
 	@Override
+	/** Starts the GUI.
+	 * @param primaryStage A stage used as the main display output.
+	*/
 	public void start(Stage primaryStage) throws Exception{
 		try {
 			//new text
@@ -31,16 +44,16 @@ public class Main extends Application {
 					
 					 //creation of Map and use of counter
 					Map<String, Integer> wordCount = new HashMap<String, Integer>();
-					String fileName = "C:\\Users\\Sern\\Documents\\School Work\\2020-2021\\Summer2021\\Software Development I\\WordOccurances\\lib\\theRavenPoem.html";
+					String fileName = "C:\\Users\\Sern\\Documents\\School Work\\2020-2021\\Summer2021\\Software Development I\\WordOccurrences\\lib\\theRavenPoem.html";
 					int count = 0;
 					String [] topWords ;
-					Integer [] topOccurances;
+					Integer [] topOccurrences;
 					topWords = new String[20];
-					topOccurances = new Integer[20];
+					topOccurrences = new Integer[20];
 					//call to class to do the work
 					WordFrequencyCounter.wordCounter(fileName, wordCount);
-					WordFrequencyCounter.wordsToArrays( topWords, topOccurances, wordCount, count);        
-					WordFrequencyCounter.wordOutput(topOccurances, topWords);
+					WordFrequencyCounter.wordsToArrays( topWords, topOccurrences, wordCount, count);        
+					WordFrequencyCounter.wordOutput(topOccurrences, topWords);
 					
 					//change Text
 					text.setText("Check your console to see the sorted words!");
@@ -66,6 +79,9 @@ public class Main extends Application {
 		}
 	}
 	
+	/** Main function to launch the GUI
+	 * @param args A string array representing function passed parameters.
+	*/
 	public static void main(String[] args) {
 		//GUI
 		launch(args);

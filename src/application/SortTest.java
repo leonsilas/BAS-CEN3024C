@@ -6,9 +6,17 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.junit.jupiter.api.Test;
 
+/** Test to ensure correct sorting.
+ * @author Leon Silas
+ * @author www.github.com/leonsilas
+ * @version 1.0
+*/
+
 class SortTest {
 
 	@Test
+	/** Starts the test.
+	*/
 	void test() {
 		//test data
 		WordFrequencyCounter test = new WordFrequencyCounter();
