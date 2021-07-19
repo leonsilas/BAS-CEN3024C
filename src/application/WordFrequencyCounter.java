@@ -2,6 +2,11 @@ package application;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -55,13 +60,42 @@ public class WordFrequencyCounter {
                 if (currentWord.equalsIgnoreCase(""))
                     continue;
 
-                //puts words into hashmap
+                /*puts words into hashmap DEPRECIATED
                 Integer words = wordCount.get(currentWord);
                 if (words != null)
                     words++;
                 else
                     words = 1;
                 wordCount.put(currentWord, words);
+                */
+                
+                //puts words into database
+                try {
+        			//setup for connection
+        			String driver = "com.mysql.cj.jdbc.Driver";
+        			String url = "jdbc:mysql://localhost:3306/wordoccurrences";
+        			String username = "leon";
+        			String password = "password";
+        			Class.forName(driver);
+        			Connection conn = DriverManager.getConnection(url, username, password);
+        			conn.setAutoCommit(false);
+        			Statement stmt = conn.createStatement();
+        			
+        			//insertion into database
+        			String sql = "INSERT INTO word (word) " +
+        								"VALUES ('" + currentWord + "');";
+	       	         stmt.executeUpdate(sql);
+	
+	    	         //closing database
+	    	         stmt.close();
+	    	         conn.commit();
+	    	         conn.close();
+        		}
+        		catch ( Exception e ) {
+        			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+        			System.exit(0);
+        		}
+                
             }
 
         } 
@@ -74,6 +108,8 @@ public class WordFrequencyCounter {
         finally {
             if(input!=null)
                 input.close();
+            System.out.println("Records created successfully\n");
+            System.out.println("=====================================\n");  
         }
     }//end of wordFrequencyCounter
 
@@ -112,8 +148,49 @@ public class WordFrequencyCounter {
 	 * @param topOccurrences An Integer array used to store the occurrences from wordCount.
 	*/
     public static void wordOutput(Integer[] topOccurrences, String [] topWords) {
+    	/*output using the array DEPRECIATED
         for (int i = 18; i >= 0; i--) {
         	System.out.println(topOccurrences[i] + " - " + topWords[i]);
+        }*/
+        
+        //output using the database
+        try {
+			//setup for connection
+			String driver = "com.mysql.cj.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/wordoccurrences";
+			String username = "leon";
+			String password = "password";
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, username, password);
+			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+			
+			//output from database
+			System.out.println("Top 20 words selected.\n");
+		     String sql = "SELECT  word, count(*) AS occurrences FROM word GROUP BY word ORDER BY occurrences DESC LIMIT 10;";
+		     ResultSet rs = stmt.executeQuery(sql);
+		     ResultSetMetaData rsmd = rs.getMetaData();
+		     int colNum = rsmd.getColumnCount();
+		     
+		     //prints out selection
+		     while (rs.next()) {
+		         for (int i = 1; i <= colNum; i++) {
+		             String columnValue = rs.getString(i);
+		             System.out.println(rsmd.getColumnName(i) + ": " + columnValue);
+		         }
+		         System.out.println("");
+		     }
+		
+		     //closing database
+		     stmt.close();
+		     conn.commit();
+		     conn.close();
+		  } catch ( Exception e ) {
+		     System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		     System.exit(0);
+		  }
+        finally {
+        	System.out.println("=====================================\n");
         }
     }
 
