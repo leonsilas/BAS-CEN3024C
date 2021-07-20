@@ -9,8 +9,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
-import java.util.Map.Entry;
+import javafx.scene.control.TextArea;
 
 /** Represents a word frequency counter.
  * @author Leon Silas
@@ -60,14 +59,13 @@ public class WordFrequencyCounter {
                 if (currentWord.equalsIgnoreCase(""))
                     continue;
 
-                /*puts words into hashmap DEPRECIATED
+                //puts words into hashmap DEPRECIATED
                 Integer words = wordCount.get(currentWord);
                 if (words != null)
                     words++;
                 else
                     words = 1;
                 wordCount.put(currentWord, words);
-                */
                 
                 //puts words into database
                 try {
@@ -112,47 +110,12 @@ public class WordFrequencyCounter {
             System.out.println("=====================================\n");  
         }
     }//end of wordFrequencyCounter
-
-	/** Sorts Map from wordCounter.
-	 * @param wordCount A Map used to store File Strings.
-	 * @return sortedWordCount A TreeMap containing the sorted Strings and occurrences.
-	*/
-    public static TreeMap<Integer, String> sortHashMap (Map<String, Integer> wordCount) {
-        //sorts using TreeMap
-        TreeMap<Integer, String> sortedWordCount = new TreeMap<Integer, String>();
-        for(Entry<String, Integer> entry : wordCount.entrySet())
-            sortedWordCount.put(entry.getValue(), entry.getKey());
-
-        return sortedWordCount;
-    }//end of sortHashMap
-	
-	/** Places Strings and number of occurrences into individual arrays.
-	 * @param topWords A String array used to store the words from wordCount.
-	 * @param topOccurrences An Integer array used to store the occurrences from wordCount.
-	 * @param wordCount A Map used to store File Strings.
-	 * @param count An int used to limit number of words put into the arrays.
-	*/
-    public static void wordsToArrays(String[] topWords, Integer[] topOccurrences, Map<String,Integer> wordCount, int count) {
-    	TreeMap<Integer,String> sortedWordCount = sortHashMap(wordCount);
-        for (Entry<Integer, String> entry : sortedWordCount.entrySet()) {
-            if (count == 20) 
-               break;
-            topWords[count] = entry.getValue();
-            topOccurrences[count] = entry.getKey();
-            count++;
-         }
-    }
     
 	/** Outputs words and occurrences in readable format.
-	 * @param topWords A String array used to store the words from wordCount.
-	 * @param topOccurrences An Integer array used to store the occurrences from wordCount.
+	 * @param ta A TextArea used to output the words from wordCount.
 	*/
-    public static void wordOutput(Integer[] topOccurrences, String [] topWords) {
-    	/*output using the array DEPRECIATED
-        for (int i = 18; i >= 0; i--) {
-        	System.out.println(topOccurrences[i] + " - " + topWords[i]);
-        }*/
-        
+    public static void wordOutput(TextArea ta) {
+       
         //output using the database
         try {
 			//setup for connection
@@ -166,8 +129,7 @@ public class WordFrequencyCounter {
 			Statement stmt = conn.createStatement();
 			
 			//output from database
-			System.out.println("Top 20 words selected.\n");
-		     String sql = "SELECT  word, count(*) AS occurrences FROM word GROUP BY word ORDER BY occurrences DESC LIMIT 10;";
+		     String sql = "SELECT  count(*) AS occurrences, word FROM word GROUP BY word ORDER BY occurrences DESC LIMIT 20;";
 		     ResultSet rs = stmt.executeQuery(sql);
 		     ResultSetMetaData rsmd = rs.getMetaData();
 		     int colNum = rsmd.getColumnCount();
@@ -176,9 +138,15 @@ public class WordFrequencyCounter {
 		     while (rs.next()) {
 		         for (int i = 1; i <= colNum; i++) {
 		             String columnValue = rs.getString(i);
-		             System.out.println(rsmd.getColumnName(i) + ": " + columnValue);
+		             
+		             //odds are the word, evens are the occurrences
+		             if (i%2 == 0)
+		            	 ta.appendText(columnValue + "\n");
+		             else if (i == 20)
+		            	 ta.appendText(columnValue);
+		             else
+		            	 ta.appendText(columnValue + " - ");
 		         }
-		         System.out.println("");
 		     }
 		
 		     //closing database
@@ -190,6 +158,7 @@ public class WordFrequencyCounter {
 		     System.exit(0);
 		  }
         finally {
+        	System.out.println("Records outputted successfully\n");  
         	System.out.println("=====================================\n");
         }
     }

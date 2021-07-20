@@ -6,11 +6,9 @@ This code is meant to taken in a given file, in this case an html file, and outp
 
 The workspace contains two folders by default, where:
 
-- `main`: execute functions to take in the file, count the words, sort them, and list the top 20 from most to least frequent
-    - `wordFrequencyCounter`: VOID - opens and reads the file, counts the words based on input.hasNext(), uses replaceAll() to remove unnecessary characters, equalsIgnoreCase() to ensure no duplication of words in Map, and puts the Integer into the Map for each word counted
-    - `sortHashMap`: RETURN TREEMAP<INTEGER, STRING> - puts the hash map values into a TreeMap to sort the frequencies naturally and returns the new TreeMap
-    - `loop for output`: uses enhanced for loop to take each entry in the sorted TreeMap and limit it to 20 in a new TreeMap. Print out the TreeMap using decendingMap.
+- `main`: supports GUI while taking in file and making database table. on button press execute functions from wordFrequencyCounter
+    - `wordFrequencyCounter`: VOID - opens and reads the file, counts the words based on input.hasNext(), uses replaceAll() to remove unnecessary characters, equalsIgnoreCase() to ensure same words, and then stores them in a sql database to be brought out later sorted from descending with the top 20 words.
 
-## Problems and improvements to be made
+## Final thoughts
 
-The code currently doesn't work to get rid of hyphens in between words, despite adding a check for it in the replaceAll.  It also fails to sort some of the words in the TreeMap properly, such as the use of bird 10 times not being present in the final output.  Unknown as to why.
+After working throughout this semester and learning more about Java specifics, I think learning about using a database and JavaFX really brought the project together.  Trying to store things in a TreeMap and then sorting them and doing all kinds of other things was complicated and a headache.  Simply storing them in the database and then using SQL to pull them out the way I wanted was so much easier, and it condensed my code while making it much easier to read and interpret on both the back and front end.  Definitely one of my favorite projects to work on so far.

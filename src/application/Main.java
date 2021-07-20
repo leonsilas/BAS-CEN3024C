@@ -8,15 +8,16 @@ import java.util.Map;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-//TODO Add Deployment - MODULE 11
-//TODO Update Any Documentation for Module 11 before Final Submission (Module 10 is already documented, just pending 11 before using JavaDoc)
 
 /** Represents the GUI for the program.
  * @author Leon Silas
@@ -30,9 +31,18 @@ public class Main extends Application {
 	*/
 	@Override
 	public void start(Stage primaryStage) throws Exception{
-		try {
+		try {			
 			//new text
-			Text text = new Text("Waiting for you to press the button...");
+			Text text = new Text("Please wait after pressing to see your results. It may take awhile.");
+			Text titleText = new Text("    We've found the file for \nThe Raven by Edgar Allan Poe");
+			titleText.setFont(Font.font("Verdana", 20));
+			//output text area
+			TextArea ta = new TextArea();
+			ta.setPrefHeight(360);
+			ScrollPane sp = new ScrollPane(ta);
+			sp.setHmax(0.8);
+			sp.setPrefHeight(360);
+			
 			
 			//new button
 			Button runButt = new Button();
@@ -47,33 +57,28 @@ public class Main extends Application {
 					 //creation of Map and use of counter
 					Map<String, Integer> wordCount = new HashMap<String, Integer>();
 					String fileName = "C:\\Users\\Sern\\Documents\\School Work\\2020-2021\\Summer2021\\Software Development I\\WordOccurrences\\lib\\theRavenPoem.html";
-					int count = 0;
-					String [] topWords ;
-					Integer [] topOccurrences;
-					topWords = new String[20];
-					topOccurrences = new Integer[20];
 					//call to class to do the work
-					WordFrequencyCounter.wordCounter(fileName, wordCount);
-					WordFrequencyCounter.wordsToArrays( topWords, topOccurrences, wordCount, count);        
-					WordFrequencyCounter.wordOutput(topOccurrences, topWords);
+					WordFrequencyCounter.wordCounter(fileName, wordCount);     
+					WordFrequencyCounter.wordOutput(ta);
 					
 					//change Text
-					text.setText("Check your console to see the sorted words!");
+					text.setText("Done! Check out the top 20 words in this text below!");
 				}
 			
 			});
 			
 			//stack for the window and adding parts
-			VBox layout = new VBox();
-			layout.setSpacing(10);
+			VBox layout = new VBox(15);
+			layout.setPadding(new Insets(10, 10, 0, 10));
 			layout.setAlignment(Pos.CENTER);
+			layout.getChildren().add(titleText);
 			layout.getChildren().add(runButt);
 			layout.getChildren().add(text);
+			layout.getChildren().add(sp);
 			
 			//setting scene
-			Scene scene = new Scene(layout,400,450);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setTitle("Text Stats");
+			Scene scene = new Scene(layout,400,550);
+			primaryStage.setTitle("Word Occurrences");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -82,7 +87,7 @@ public class Main extends Application {
 	}
 	
 	/** Connects to the database.
-	 * @throws Exception for failed connection.
+	 * @return conn Connection to the database.
 	*/
 	public static Connection getConnection() throws Exception {
 		System.out.println("=====================================\n");
@@ -107,7 +112,6 @@ public class Main extends Application {
 	}
 	
 	/** Creates a table in connected database.
-	 * @throws Exception for failed connection.
 	*/
 	public static void createTable() throws Exception {
 		try {
@@ -139,7 +143,6 @@ public class Main extends Application {
 	
 	/** Main function to launch the GUI
 	 * @param args A string array representing function passed parameters.
-	 * @throws Exception. 
 	*/
 	public static void main(String[] args) throws Exception {
 		//GUI
